@@ -1,0 +1,27 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-ivory text-stone-900 font-body antialiased;
+  }
+  ::selection {
+    @apply bg-gold-400/40 text-emerald-950;
+  }
+}
+
+@layer utilities {
+  .facet-bg {
+    background-color: #0A2E24;
+    background-image:
+      radial-gradient(120% 120% at 10% 0%, rgba(217,185,104,0.10) 0%, rgba(217,185,104,0) 45%),
+      radial-gradient(120% 120% at 90% 100%, rgba(29,93,72,0.55) 0%, rgba(29,93,72,0) 55%);
+  }
+  .text-balance {
+    text-wrap: balance;
+  }
+}
