@@ -88,7 +88,6 @@ export default function CertificateSearch() {
           <input
             id="cert-number"
             type="text"
-            inputMode="numeric"
             maxLength={NUMBER_MAX_LENGTH}
             value={number}
             onChange={handleChange}
