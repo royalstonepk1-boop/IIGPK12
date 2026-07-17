@@ -133,6 +133,60 @@ export default function AdminDashboard() {
       )}
 
       <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+
+
+        {/* Create / edit form */}
+        <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 p-6 h-fit">
+          <h2 className="font-display text-xl text-emerald-950 mb-4">
+            {editingId ? "Edit certificate" : "Add certificate"}
+          </h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-stone-600 mb-1.5">
+                Number
+              </label>
+              <input
+                required
+                type="text"
+                value={form.number}
+                onChange={(e) => setForm({ ...form, number: e.target.value })}
+                className="w-full rounded-lg border border-stone-900/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold-500/60"
+              />
+            </div>
+            <div>
+              <label className="block text-xs uppercase tracking-widest text-stone-600 mb-1.5">
+                Certificate image
+              </label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={handleFileChange}
+                className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-900 file:text-ivory file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-widest hover:file:bg-emerald-800 file:cursor-pointer"
+              />
+              {preview && (
+                <img src={preview} alt="Preview" className="mt-3 h-24 w-24 object-cover rounded-lg ring-1 ring-stone-900/10" />
+              )}
+            </div>
+
+            <button
+              type="submit"
+              disabled={saving || (!imageFile && !form.imgUrl)}
+              className="flex-1 rounded-lg bg-emerald-900 hover:bg-emerald-800 disabled:opacity-60 text-ivory font-semibold text-sm tracking-wide px-4 py-2.5 transition-colors"
+            >
+              {saving ? "Uploading & saving…" : editingId ? "Save changes" : "Add certificate"}
+            </button>
+            {editingId && (
+              <button
+                type="button"
+                onClick={startCreate}
+                className="rounded-lg border border-stone-900/15 text-stone-700 text-sm font-semibold px-4 py-2.5 hover:bg-stone-900/5"
+              >
+                Cancel
+              </button>
+            )}
+            {/* </div> */}
+          </form>
+        </div>
         {/* Table */}
         <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden">
           <div className="overflow-x-auto">
@@ -185,59 +239,6 @@ export default function AdminDashboard() {
             </table>
           </div>
         </div>
-
-        {/* Create / edit form */}
-        <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 p-6 h-fit">
-          <h2 className="font-display text-xl text-emerald-950 mb-4">
-            {editingId ? "Edit certificate" : "Add certificate"}
-          </h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <div>
-              <label className="block text-xs uppercase tracking-widest text-stone-600 mb-1.5">
-                Number
-              </label>
-              <input
-                required
-                type="text"
-                value={form.number}
-                onChange={(e) => setForm({ ...form, number: e.target.value })}
-                className="w-full rounded-lg border border-stone-900/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold-500/60"
-              />
-            </div>
-            <div>
-              <label className="block text-xs uppercase tracking-widest text-stone-600 mb-1.5">
-                Certificate image
-              </label>
-              <input
-                type="file"
-                accept="image/*"
-                onChange={handleFileChange}
-                className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-900 file:text-ivory file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-widest hover:file:bg-emerald-800 file:cursor-pointer"
-              />
-              {preview && (
-                <img src={preview} alt="Preview" className="mt-3 h-24 w-24 object-cover rounded-lg ring-1 ring-stone-900/10" />
-              )}
-            </div>
-
-            <button
-              type="submit"
-              disabled={saving || (!imageFile && !form.imgUrl)}
-              className="flex-1 rounded-lg bg-emerald-900 hover:bg-emerald-800 disabled:opacity-60 text-ivory font-semibold text-sm tracking-wide px-4 py-2.5 transition-colors"
-            >
-              {saving ? "Uploading & saving…" : editingId ? "Save changes" : "Add certificate"}
-            </button>
-            {editingId && (
-              <button
-                type="button"
-                onClick={startCreate}
-                className="rounded-lg border border-stone-900/15 text-stone-700 text-sm font-semibold px-4 py-2.5 hover:bg-stone-900/5"
-              >
-                Cancel
-              </button>
-            )}
-        {/* </div> */}
-      </form>
-    </div>
       </div >
     </div >
   );
