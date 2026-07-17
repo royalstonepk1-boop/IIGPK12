@@ -9,6 +9,7 @@ import {
 } from "../services/adminApi";
 
 const EMPTY_FORM = { number: "", imgUrl: "" };
+const NUMBER_MAX_LENGTH = 10;
 
 export default function AdminDashboard() {
   const { user, logout, getToken } = useAuth();
@@ -21,6 +22,7 @@ export default function AdminDashboard() {
   const [editingId, setEditingId] = useState(null);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+  const [searchTerm, setSearchTerm] = useState("");
 
   async function refresh() {
     setLoading(true);
@@ -62,8 +64,23 @@ export default function AdminDashboard() {
   function handleFileChange(e) {
     const file = e.target.files?.[0];
     if (!file) return;
+
+    // Remove the previous preview before setting the new one.
+    if (preview && preview.startsWith("blob:")) {
+      URL.revokeObjectURL(preview);
+    }
+
     setImageFile(file);
     setPreview(URL.createObjectURL(file)); // local preview, no upload yet
+  }
+
+  function clearImage() {
+    if (preview && preview.startsWith("blob:")) {
+      URL.revokeObjectURL(preview);
+    }
+    setImageFile(null);
+    setPreview("");
+    setForm((f) => ({ ...f, imgUrl: "" }));
   }
 
   async function handleSubmit(e) {
@@ -113,6 +130,10 @@ export default function AdminDashboard() {
     }
   }
 
+  const filteredCerts = certs.filter((c) =>
+    c.number.toLowerCase().includes(searchTerm.trim().toLowerCase())
+  );
+
   return (
     <div className="max-w-6xl mx-auto px-5 sm:px-8 py-10 sm:py-14">
       <div className="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -132,11 +153,11 @@ export default function AdminDashboard() {
         <p className="mb-6 text-sm text-red-700 bg-red-100 rounded-md px-4 py-2">{error}</p>
       )}
 
-      <div className="grid gap-8 lg:grid-cols-[1fr_360px]">
+      <div className="grid gap-8 lg:grid-cols-[1fr_560px]">
 
 
         {/* Create / edit form */}
-        <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 p-6 h-fit">
+        <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 p-6">
           <h2 className="font-display text-xl text-emerald-950 mb-4">
             {editingId ? "Edit certificate" : "Add certificate"}
           </h2>
@@ -148,6 +169,7 @@ export default function AdminDashboard() {
               <input
                 required
                 type="text"
+                maxLength={NUMBER_MAX_LENGTH}
                 value={form.number}
                 onChange={(e) => setForm({ ...form, number: e.target.value })}
                 className="w-full rounded-lg border border-stone-900/10 px-4 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold-500/60"
@@ -164,7 +186,21 @@ export default function AdminDashboard() {
                 className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-900 file:text-ivory file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-widest hover:file:bg-emerald-800 file:cursor-pointer"
               />
               {preview && (
-                <img src={preview} alt="Preview" className="mt-3 h-24 w-24 object-cover rounded-lg ring-1 ring-stone-900/10" />
+                <div className="relative mt-3 h-24 w-24">
+                  <img
+                    src={preview}
+                    alt="Preview"
+                    className="h-24 w-24 object-cover rounded-lg ring-1 ring-stone-900/10"
+                  />
+                  <button
+                    type="button"
+                    onClick={clearImage}
+                    aria-label="Remove selected image"
+                    className="absolute -top-2 -right-2 h-6 w-6 rounded-full bg-stone-900 text-ivory text-xs font-bold flex items-center justify-center shadow-md hover:bg-red-700 transition-colors"
+                  >
+                    ×
+                  </button>
+                </div>
               )}
             </div>
 
@@ -189,9 +225,32 @@ export default function AdminDashboard() {
         </div>
         {/* Table */}
         <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden">
-          <div className="overflow-x-auto">
+        <div className="text-center">Total Certificates : <span className="text-red-500 font-bold">{filteredCerts?.length}</span></div>
+          <div className="p-4 border-b border-stone-900/5">
+            <div className="relative">
+              <input
+                type="text"
+                maxLength={NUMBER_MAX_LENGTH}
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Search by number…"
+                className="w-full rounded-lg border border-stone-900/10 pl-4 pr-9 py-2.5 focus:outline-none focus:ring-2 focus:ring-gold-500/60"
+              />
+              {searchTerm && (
+                <button
+                  type="button"
+                  onClick={() => setSearchTerm("")}
+                  aria-label="Clear search"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 h-5 w-5 rounded-full bg-stone-900/10 text-stone-700 text-xs font-bold flex items-center justify-center hover:bg-stone-900/20 transition-colors"
+                >
+                  ×
+                </button>
+              )}
+            </div>
+          </div>
+          <div className="overflow-auto max-h-[420px]">
             <table className="w-full text-sm">
-              <thead className="bg-emerald-950 text-ivory">
+              <thead className="bg-emerald-950 text-ivory sticky top-0">
                 <tr>
                   <th className="text-left px-5 py-3 font-semibold">Number</th>
                   <th className="text-left px-5 py-3 font-semibold">Image</th>
@@ -206,14 +265,16 @@ export default function AdminDashboard() {
                     </td>
                   </tr>
                 )}
-                {!loading && certs.length === 0 && (
+                {!loading && filteredCerts.length === 0 && (
                   <tr>
                     <td colSpan={3} className="px-5 py-8 text-center text-stone-500">
-                      No certificates yet — add one on the right.
+                      {certs.length === 0
+                        ? "No certificates yet — add one on the left."
+                        : "No certificates match your search."}
                     </td>
                   </tr>
                 )}
-                {certs.map((c) => (
+                {filteredCerts.map((c) => (
                   <tr key={c._id} className="border-t border-stone-900/5">
                     <td className="px-5 py-3 font-semibold text-emerald-900">{c.number}</td>
                     <td className="px-5 py-3">
