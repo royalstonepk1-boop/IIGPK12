@@ -53,7 +53,7 @@ export default function Home() {
         </div>
         <div className="relative w-full pt-[56.25%] rounded-2xl overflow-hidden shadow-card ring-1 ring-stone-900/10">
           <iframe
-            src={`https://www.youtube.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&playsinline=1&origin=${window.location.origin}`}
+            src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?playsinline=1`}
             className="absolute top-0 left-0 w-full h-full"
             allowFullScreen
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
