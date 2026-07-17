@@ -53,12 +53,12 @@ export default function Home() {
         </div>
         <div className="relative w-full pt-[56.25%] rounded-2xl overflow-hidden shadow-card ring-1 ring-stone-900/10">
           <iframe
-            className="absolute inset-0 w-full h-full"
-            src={`https://www.youtube.com/embed/${VIDEO_ID}`}
-            title="IIGPK introduction video"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+            src={`https://www.youtube.com/embed/${VIDEO_ID}?rel=0&modestbranding=1&playsinline=1&origin=${window.location.origin}`}
+            className="absolute top-0 left-0 w-full h-full"
             allowFullScreen
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            title="IIGPK introduction video"
+            style={{ border: 'none', touchAction: 'auto' }}
           />
         </div>
       </section>
