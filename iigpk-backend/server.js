@@ -16,8 +16,9 @@ app.use('/api/admin', require('./routes/adminAuthRoutes'));
 app.use('/api/certificates', require('./routes/certificateRoutes'));
 app.use('/api/upload', require('./routes/uploadRoutes'));
 
-app.get('/health', (req, res) => res.json({ status: 'ok' }));
-
+app.get("/", (req, res) => {
+  res.send("Backend is running!");
+});
 mongoose
   .connect(process.env.MONGO_URI)
   .then(() => {

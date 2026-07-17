@@ -16,7 +16,7 @@ router.get('/search/:number', getCertificateByNumber);
 
 // Admin portal — full CRUD, all protected.
 router.get('/', authMiddleware, adminOnly, listCertificates);
-router.get('/:id', authMiddleware, adminOnly, getCertificate);
+router.get('/:id' , getCertificate);
 router.post('/', authMiddleware, adminOnly, createCertificate);
 router.put('/:id', authMiddleware, adminOnly, updateCertificate);
 router.delete('/:id', authMiddleware, adminOnly, deleteCertificate);
