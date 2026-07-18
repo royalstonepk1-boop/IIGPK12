@@ -114,8 +114,8 @@ export default function CertificateSearch() {
       )}
 
       {status === "success" && result && (
-        <div className="mt-6 bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden animate-[fadeIn_.3s_ease]">
-          <div className="flex items-center justify-between px-5 py-3 bg-emerald-950 text-ivory">
+        <div className="mt-6 bg-transparent rounded-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden animate-[fadeIn_.3s_ease]">
+          <div className="flex items-center justify-between px-5 py-3 bg-emerald-950 text-ivory mb-8">
             <span className="font-display text-lg tracking-wide">
               Certificate <span className="font-body text-md">#{result.number}</span>
             </span>

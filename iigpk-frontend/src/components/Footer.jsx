@@ -1,14 +1,23 @@
 import { NavLink } from "react-router-dom";
+import YT from '../assets/youtube.png';
 
 const LOGO_URL =
   "https://ecomexpanding.com/iigpk/wp-content/uploads/2024/01/iigpk-logo.png";
+
+  const open = (link) => {
+    window.open(link, '_blank');
+  }
 
 export default function Footer() {
   return (
     <footer className="bg-emerald-950 text-ivory/90 mt-24">
       <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 grid gap-10 sm:grid-cols-2">
         <div>
+          <div className="flex items-center justify-center sm:justify-start"> 
           <img src={LOGO_URL} alt="IIGPK logo" className="h-12 w-auto object-contain mb-4 bg-white rounded-md p-1" />
+          <img src={YT} width={40} height={40} className='mx-3 mb-3 cursor-pointer' onClick={() => open('https://www.youtube.com/@IIGOFFICIAL')} />
+          </div>
+
           <p className="text-sm text-ivory/60 leading-relaxed max-w-xs">
             Independent certificate verification for gemstones — check
             authenticity in seconds using your certificate number.
