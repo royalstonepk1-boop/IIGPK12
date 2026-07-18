@@ -6,7 +6,7 @@ const LOGO_URL =
 export default function Footer() {
   return (
     <footer className="bg-emerald-950 text-ivory/90 mt-24">
-      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 grid gap-10 sm:grid-cols-3">
+      <div className="max-w-6xl mx-auto px-5 sm:px-8 py-14 grid gap-10 sm:grid-cols-2">
         <div>
           <img src={LOGO_URL} alt="IIGPK logo" className="h-12 w-auto object-contain mb-4 bg-white rounded-md p-1" />
           <p className="text-sm text-ivory/60 leading-relaxed max-w-xs">
@@ -24,7 +24,7 @@ export default function Footer() {
           </ul>
         </div>
 
-        <div>
+        {/* <div>
           <h4 className="font-display text-lg text-gold-400 mb-4">Get in touch</h4>
           <ul className="space-y-2 text-sm text-ivory/70">
             <li>Raj Royal jeweller, Nai Abadi Road, Chaki Stop, Barakhau, Islamabad, Pakistan</li>
@@ -38,7 +38,7 @@ export default function Footer() {
                 <i className="bi bi-whatsapp mr-2"></i>+92-315-5066472
               </a></li>
           </ul>
-        </div>
+        </div> */}
       </div>
 
       <div className="border-t border-ivory/10">

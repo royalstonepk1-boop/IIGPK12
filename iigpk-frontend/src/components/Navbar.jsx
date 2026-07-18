@@ -7,7 +7,7 @@ const LOGO_URL =
 const links = [
   { to: "/", label: "Home" },
   { to: "/about", label: "About Us" },
-  { to: "/contact", label: "Contact" },
+  // { to: "/contact", label: "Contact" },
 ];
 
 export default function Navbar() {
