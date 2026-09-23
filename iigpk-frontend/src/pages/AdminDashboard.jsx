@@ -186,11 +186,11 @@ export default function AdminDashboard() {
                 className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-900 file:text-ivory file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-widest hover:file:bg-emerald-800 file:cursor-pointer"
               />
               {preview && (
-                <div className="relative mt-3 h-24 w-24">
+                <div className="relative mt-3 h-60 w-60">
                   <img
                     src={preview}
                     alt="Preview"
-                    className="h-24 w-24 object-cover rounded-lg ring-1 ring-stone-900/10"
+                    className="h-54 w-54 object-cover rounded-lg ring-1 ring-stone-900/10"
                   />
                   <button
                     type="button"

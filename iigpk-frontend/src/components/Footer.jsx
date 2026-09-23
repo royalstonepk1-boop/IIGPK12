@@ -15,7 +15,9 @@ export default function Footer() {
         <div>
           <div className="flex items-center justify-center sm:justify-start"> 
           <img src={LOGO_URL} alt="IIGPK logo" className="h-12 w-auto object-contain mb-4 bg-white rounded-md p-1" />
-          <img src={YT} width={40} height={40} className='mx-3 mb-3 cursor-pointer' onClick={() => open('https://www.youtube.com/@IIGOFFICIAL')} />
+          <img src={YT} width={40} height={40} className='mx-3 mb-3 cursor-pointer'
+          //  onClick={() => open('https://www.youtube.com/@IIGOFFICIAL')}
+            />
           </div>
 
           <p className="text-sm text-ivory/60 leading-relaxed max-w-xs">

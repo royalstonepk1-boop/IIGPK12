@@ -53,9 +53,8 @@ export default function Home() {
         </div>
         <div className="relative w-full pt-[56.25%] rounded-2xl overflow-hidden shadow-card ring-1 ring-stone-900/10">
           <iframe
-            src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?playsinline=1`}
+            src={`https://www.youtube-nocookie.com/embed/${VIDEO_ID}?playsinline=1&modestbranding=1&rel=0&iv_load_policy=3&fs=0`}
             className="absolute top-0 left-0 w-full h-full"
-            allowFullScreen
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             title="IIGPK introduction video"
             style={{ border: 'none', touchAction: 'auto' }}
