@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { getCertificateByNumber } from "../services/api";
+import CertificateImageModal from "../pages/CertificateImageModal";
 
 const NUMBER_MAX_LENGTH = 10;
 const DEBOUNCE_MS = 500;
@@ -9,6 +10,7 @@ export default function CertificateSearch() {
   const [status, setStatus] = useState("idle"); // idle | loading | success | error
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
   const debounceRef = useRef(null);
 
   async function runSearch(value) {
@@ -114,7 +116,7 @@ export default function CertificateSearch() {
       )}
 
       {status === "success" && result && (
-        <div className="mt-6 bg-transparent rounded-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden animate-[fadeIn_.3s_ease]">
+        <div className="mt-6 bg-transparent rounded-t-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden animate-[fadeIn_.3s_ease]">
           <div className="flex items-center justify-between px-5 py-3 bg-emerald-950 text-ivory mb-8">
             <span className="font-display text-lg tracking-wide">
               Certificate <span className="font-body text-md">#{result.number}</span>
@@ -129,10 +131,17 @@ export default function CertificateSearch() {
           <img
             src={result.imgUrl}
             alt={`Certificate ${result.number}`}
-            className="w-full max-h-[520px] object-contain bg-stone-900/5"
+            onClick={()=>setSelectedImage(result)}
+            title="Click To Preview Full Image"
+            className="w-full max-h-[520px] object-contain bg-stone-900/5 radius-0 hover:cursor-pointer"
           />
         </div>
       )}
+      <CertificateImageModal
+        imageUrl={selectedImage?.imgUrl}
+        certificateNumber={selectedImage?.number}
+        onClose={() => setSelectedImage(null)}
+      />
     </div>
   );
 }

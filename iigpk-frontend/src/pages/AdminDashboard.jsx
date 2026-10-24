@@ -1,3 +1,4 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { useAuth } from "../context/AuthContext";
 import {
@@ -7,6 +8,7 @@ import {
   deleteCertificateAdmin,
   uploadImageAdmin,
 } from "../services/adminApi";
+import CertificateImageModal from "./CertificateImageModal";
 
 const EMPTY_FORM = { number: "", imgUrl: "" };
 const NUMBER_MAX_LENGTH = 10;
@@ -23,6 +25,7 @@ export default function AdminDashboard() {
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedImage, setSelectedImage] = useState(null);
 
   async function refresh() {
     setLoading(true);
@@ -186,11 +189,13 @@ export default function AdminDashboard() {
                 className="w-full text-sm text-stone-600 file:mr-3 file:rounded-lg file:border-0 file:bg-emerald-900 file:text-ivory file:px-4 file:py-2 file:text-xs file:font-semibold file:uppercase file:tracking-widest hover:file:bg-emerald-800 file:cursor-pointer"
               />
               {preview && (
-                <div className="relative mt-3 h-60 w-60">
+                <div className="relative mt-3 h-50 w-60">
                   <img
                     src={preview}
                     alt="Preview"
-                    className="h-54 w-54 object-cover rounded-lg ring-1 ring-stone-900/10"
+                    width={220}
+                    height={220}
+                    className="object-contain rounded-lg ring-1 ring-stone-900/10"
                   />
                   <button
                     type="button"
@@ -225,7 +230,7 @@ export default function AdminDashboard() {
         </div>
         {/* Table */}
         <div className="bg-ivory rounded-2xl shadow-card ring-1 ring-stone-900/5 overflow-hidden">
-        <div className="text-center">Total Certificates : <span className="text-red-500 font-bold">{filteredCerts?.length}</span></div>
+          <div className="text-center">Total Certificates : <span className="text-red-500 font-bold">{filteredCerts?.length}</span></div>
           <div className="p-4 border-b border-stone-900/5">
             <div className="relative">
               <input
@@ -257,6 +262,7 @@ export default function AdminDashboard() {
                   <th className="text-right px-5 py-3 font-semibold">Actions</th>
                 </tr>
               </thead>
+
               <tbody>
                 {loading && (
                   <tr>
@@ -265,6 +271,7 @@ export default function AdminDashboard() {
                     </td>
                   </tr>
                 )}
+
                 {!loading && filteredCerts.length === 0 && (
                   <tr>
                     <td colSpan={3} className="px-5 py-8 text-center text-stone-500">
@@ -274,33 +281,98 @@ export default function AdminDashboard() {
                     </td>
                   </tr>
                 )}
-                {filteredCerts.map((c) => (
-                  <tr key={c._id} className="border-t border-stone-900/5">
-                    <td className="px-5 py-3 font-semibold text-emerald-900">{c.number}</td>
-                    <td className="px-5 py-3">
-                      <img src={c.imgUrl} alt={c.number} className="h-12 w-12 object-cover rounded-md" />
-                    </td>
-                    <td className="px-5 py-3 text-right space-x-3">
-                      <button
-                        onClick={() => startEdit(c)}
-                        className="text-xs font-semibold uppercase tracking-widest text-emerald-800 hover:text-emerald-950"
-                      >
-                        Edit
-                      </button>
-                      <button
-                        onClick={() => handleDelete(c._id)}
-                        className="text-xs font-semibold uppercase tracking-widest text-red-700 hover:text-red-900"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
+
+                {!loading &&
+                  ["Today", "Yesterday", "Previous"].map((group) => {
+                    const now = new Date();
+
+                    const today = new Date(
+                      now.getFullYear(),
+                      now.getMonth(),
+                      now.getDate()
+                    );
+
+                    const yesterday = new Date(today);
+                    yesterday.setDate(yesterday.getDate() - 1);
+
+                    const groupCerts = filteredCerts.filter((c) => {
+                      const created = new Date(c.createdAt);
+
+                      if (Number.isNaN(created.getTime())) {
+                        return group === "Previous";
+                      }
+
+                      if (group === "Today") return created >= today;
+
+                      if (group === "Yesterday") {
+                        return created >= yesterday && created < today;
+                      }
+
+                      return created < yesterday;
+                    });
+
+                    if (groupCerts.length === 0) return null;
+
+                    return (
+                      <React.Fragment key={group}>
+                        {/* Group heading aligned with the table */}
+                        <tr>
+                          <td
+                            colSpan={3}
+                            className="px-5 py-3 bg-stone-100 text-red-500 font-bold border-t-4 border-ivory text-left"
+                          >
+                            {group} ({groupCerts.length})
+                          </td>
+                        </tr>
+
+                        {/* Certificate rows */}
+                        {groupCerts.map((c) => (
+                          <tr key={c._id} className="border-t border-stone-900/5">
+                            <td className="text-left px-5 py-3 font-semibold text-emerald-900">
+                              {c.number}
+                            </td>
+
+                            <td className="text-left px-5 py-3">
+                              <img
+                                src={c.imgUrl}
+                                alt={c.number}
+                                onClick={() => setSelectedImage(c)}
+                                title="Click to view full image"
+                                className="h-12 w-12 object-cover rounded-md hover:cursor-pointer"
+                              />
+                            </td>
+
+                            <td className="text-right px-5 py-3 whitespace-nowrap">
+                              <button
+                                onClick={() => startEdit(c)}
+                                className="text-xs font-semibold uppercase tracking-widest text-emerald-800 hover:text-emerald-950 mr-3"
+                              >
+                                Edit
+                              </button>
+
+                              <button
+                                onClick={() => handleDelete(c._id)}
+                                className="text-xs font-semibold uppercase tracking-widest text-red-700 hover:text-red-900"
+                              >
+                                Delete
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </React.Fragment>
+                    );
+                  })}
               </tbody>
+
             </table>
           </div>
         </div>
       </div >
+      <CertificateImageModal
+        imageUrl={selectedImage?.imgUrl}
+        certificateNumber={selectedImage?.number}
+        onClose={() => setSelectedImage(null)}
+      />
     </div >
   );
 }
